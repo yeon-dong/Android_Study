@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.yeondong.reservation"
+    namespace = "com.yeondong.signupapp"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.yeondong.reservation"
+        applicationId = "com.yeondong.signupapp"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
