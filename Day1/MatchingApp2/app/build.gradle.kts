@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.yeondong.matchingapp"
+    namespace = "com.yeondong.matchingapp2"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.yeondong.matchingapp"
+        applicationId = "com.yeondong.matchingapp2"
         minSdk = 26
         targetSdk = 35
         versionCode = 1

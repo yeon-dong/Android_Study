@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace = "com.yeondong.matchingapp"
-    compileSdk = 35
+    namespace = "com.yeondong.reservation"
+    compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.yeondong.matchingapp"
+        applicationId = "com.yeondong.reservation"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
