@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         //나루토 선택 기본 선택
         radioButton.isChecked = true
-
+        imageView.setImageResource(R.drawable.naruto)
         // 라디오 그룹에서 선택된 값에 따라 이미지 변경
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
