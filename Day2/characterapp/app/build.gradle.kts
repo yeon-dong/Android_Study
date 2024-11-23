@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.yeondong.signupapp"
+    namespace = "com.yeondong.characterapp"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.yeondong.signupapp"
+        applicationId = "com.yeondong.characterapp"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
