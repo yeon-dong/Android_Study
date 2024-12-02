@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Jamanchu</string>
+    <string name="app_name">자만추</string>
     // 나이 값
     <string-array name="age_array">
         <item>20</item>
@@ -13,4 +13,6 @@
         <item>28</item>
         <item>29</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

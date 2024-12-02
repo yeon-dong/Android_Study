@@ -12,7 +12,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.autoever.jamanchu.R
@@ -24,22 +23,23 @@ import com.google.firebase.firestore.FirebaseFirestore
 class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_sign_up)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
-        setUI()
-    }
-
-    fun setUI() {
+        // 컴포넌트 선언
         val editTextEmail = findViewById<EditText>(R.id.editTextEmail)
-        val editTextPassword = findViewById<EditText>(R.id.editTextPassword)
-        val editTextNickname = findViewById<EditText>(R.id.editTextNickname)
+        val editTextPassword = findViewById<EditText>(R.id.editTextPW)
+        val editTextNickname = findViewById<EditText>(R.id.editTextNick)
         val editTextIntroduction = findViewById<EditText>(R.id.editTextIntroduction)
-
-        // 라디오 버튼
         val radioGroup: RadioGroup = findViewById(R.id.radioGroup)
-
-        // spinner 초기화
         val spinner: Spinner = findViewById(R.id.spinner)
+        val textViewComplete = findViewById<TextView>(R.id.textViewComplete)
+
         // 문자열 배열 어댑터 생성
         ArrayAdapter.createFromResource(
             this,
@@ -53,7 +53,6 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         // "가입하기 버튼"
-        val textViewComplete = findViewById<TextView>(R.id.textViewComplete)
         textViewComplete.setOnClickListener {
             // 선택된 라디오 버튼 ID 가져오기
             val selectedGenderId = radioGroup.checkedRadioButtonId
@@ -77,11 +76,14 @@ class SignUpActivity : AppCompatActivity() {
                 gender,
                 selectedAge
             )
+
+            Log.d("User", user.toString())
+
             signUp(user, editTextPassword.text.toString())
         }
     }
 
-    // 회원가입 함수
+    // 회원가입 메서드
     fun signUp(user: User, password: String) {
         val auth = FirebaseAuth.getInstance()
         auth.createUserWithEmailAndPassword(user.email, password)
@@ -91,9 +93,9 @@ class SignUpActivity : AppCompatActivity() {
                     val userId = auth.currentUser?.uid
                     if (userId != null) {
                         // User 객체에 ID 설정
-                        val updatedUser = user.copy(id = userId) // 새로운 User 객체 생성
+                        user.id = userId // id만 입력해준다.
                         // Firestore에 사용자 데이터 저장
-                        saveUserData(updatedUser)
+                        saveUserData(user)
                     }
                 } else {
                     // 에러 처리
@@ -114,7 +116,7 @@ class SignUpActivity : AppCompatActivity() {
                 Log.d("SignUpActivity", "User data successfully written!")
 
                 // 사진 업로드 화면으로 이동
-                val intent = Intent(this, MainActivity::class.java)
+                val intent = Intent(this, UploadActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 startActivity(intent)
             }

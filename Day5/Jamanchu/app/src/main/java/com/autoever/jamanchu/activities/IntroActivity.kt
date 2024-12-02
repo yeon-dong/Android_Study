@@ -38,7 +38,23 @@ class IntroActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_intro)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
+        // 이미지 슬라이드 뷰페이저
+        viewPager = findViewById(R.id.viewPager)
+        adapter = ImageAdapter(images)
+        viewPager.adapter = adapter
+
+        // 3초 후에 자동 페이징 시작
+        handler.postDelayed({
+            handler.post(runnable) // 딜레이 후 runnable 실행
+        }, 3000) // 3000ms (3초) 딜레이
 
         // 회원가입 버튼
         val buttonSignUP = findViewById<TextView>(R.id.buttonSignUP)
@@ -46,31 +62,19 @@ class IntroActivity : AppCompatActivity() {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
-
-
-        // 이미지 뷰페이저
-        viewPager = findViewById(R.id.viewPager)
-        adapter = ImageAdapter(images)
-        viewPager.adapter = adapter
-
-// 터치로 페이징 막기
-//        viewPager.isUserInputEnabled = false
-
-        // 3초 후에 자동 페이징 시작
-        handler.postDelayed({
-            handler.post(runnable) // 딜레이 후 runnable 실행
-        }, 3000) // 3000ms (3초) 딜레이
     }
 }
 
-class ImageAdapter(private val images: List<Int>) : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
+class ImageAdapter(private val images: List<Int>) :
+    RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
 
     inner class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_intro_image, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_intro_image, parent, false)
         return ImageViewHolder(view)
     }
 
@@ -78,5 +82,8 @@ class ImageAdapter(private val images: List<Int>) : RecyclerView.Adapter<ImageAd
         holder.imageView.setImageResource(images[position]) // 이미지 설정
     }
 
-    override fun getItemCount(): Int = images.size
+    //    override fun getItemCount(): Int = images.size
+    override fun getItemCount(): Int {
+        return images.size
+    }
 }

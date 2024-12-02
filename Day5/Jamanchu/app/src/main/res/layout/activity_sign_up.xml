@@ -58,7 +58,7 @@
             android:text="비밀번호" />
 
         <EditText
-            android:id="@+id/editTextPassword"
+            android:id="@+id/editTextPW"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="4dp"
@@ -84,7 +84,7 @@
             android:text="닉네임" />
 
         <EditText
-            android:id="@+id/editTextNickname"
+            android:id="@+id/editTextNick"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="4dp"
@@ -139,7 +139,7 @@
             android:id="@+id/radioGroup"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/radioButton"
