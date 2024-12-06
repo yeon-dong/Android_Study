@@ -14,7 +14,9 @@ import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.autoever.jamanchu.R
+import com.autoever.jamanchu.activities.ChatActivity
 import com.autoever.jamanchu.models.User
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -96,7 +98,53 @@ class MyAdapter(private val users: List<User>) : RecyclerView.Adapter<MyAdapter.
         val user = users[position]
         holder.textViewNick.text = user.nickname
         holder.textViewIntroduce.text = user.introduction
+        Glide.with(holder.itemView.context)
+            .load(user.image) // 불러올 이미지의 URL 또는 URI
+            .placeholder(R.drawable.user)
+            .into(holder.imageView) // 이미지를 표시할 ImageView
+
+        // 친구 추가 동작
+        holder.textViewFriend.setOnClickListener {
+            val auth = FirebaseAuth.getInstance()
+            val currentUser = auth.currentUser
+            val currentUserId = currentUser!!.uid
+            addFriend(holder.itemView.context, currentUserId, user.id)
+        }
+
+        // 채팅하기
+        holder.textViewChat.setOnClickListener {
+            val context = holder.itemView.context // Context 가져오기
+            val intent = Intent(context, ChatActivity::class.java)
+            // 채팅방 ID 전달
+            intent.putExtra("otherUser", user.id)
+            context.startActivity(intent) // Context를 사용해 startActivity 호출
+        }
     }
 
     override fun getItemCount() = users.size
+
+    fun addFriend(context: Context, currentUserId: String, friendId: String) {
+        val userRef = FirebaseFirestore.getInstance()
+            .collection("users").document(currentUserId)
+        userRef.get().addOnSuccessListener { documentSnapshot ->
+            val currentFriends = documentSnapshot.get("friends")
+                as? List<String> ?: emptyList()
+
+            // 친구 ID가 이미 존재하지 않는 경우에만 추가
+            if (!currentFriends.contains(friendId)) {
+                val updatedFriends = currentFriends + friendId // 새로운 친구 추가
+
+                userRef.update("friends", updatedFriends)
+                    .addOnSuccessListener {
+                        Log.d("Firestore", "Friend added successfully")
+                        Toast.makeText(context, "친구가 추가되었습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w("Firestore", "Error adding friend", e)
+                    }
+            } else {
+                Toast.makeText(context, "이미 친구로 추가된 사용자입니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 }

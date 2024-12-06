@@ -23,7 +23,7 @@ class IntroActivity : AppCompatActivity() {
     private val images = listOf(
         R.drawable.dongyeon2, // 첫 번째 이미지
         R.drawable.dongyeon1,  // 두 번째 이미지
-        R.drawable.katsudonyeon  // 두 번째 이미지
+        R.drawable.katsudonyeon
     )
     private val handler = Handler(Looper.getMainLooper())
     private var currentPage = 0
@@ -59,22 +59,29 @@ class IntroActivity : AppCompatActivity() {
         // 회원가입 버튼
         val buttonSignUP = findViewById<TextView>(R.id.buttonSignUP)
         buttonSignUP.setOnClickListener {
+            //val intent = Intent(this, UploadActivity::class.java)
             val intent = Intent(this, SignUpActivity::class.java)
+            startActivity(intent)
+        }
+
+        // 로그인 버튼
+        val buttonLogin = findViewById<TextView>(R.id.buttonLogin)
+        buttonLogin.setOnClickListener {
+            //val intent = Intent(this, UploadActivity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
     }
 }
 
-class ImageAdapter(private val images: List<Int>) :
-    RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
+class ImageAdapter(private val images: List<Int>) : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
 
     inner class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_intro_image, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_intro_image, parent, false)
         return ImageViewHolder(view)
     }
 
@@ -82,7 +89,7 @@ class ImageAdapter(private val images: List<Int>) :
         holder.imageView.setImageResource(images[position]) // 이미지 설정
     }
 
-    //    override fun getItemCount(): Int = images.size
+//    override fun getItemCount(): Int = images.size
     override fun getItemCount(): Int {
         return images.size
     }

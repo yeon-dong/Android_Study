@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.autoever.jamanchu.R
+import com.autoever.jamanchu.activities.FriendActivity
 import com.autoever.jamanchu.activities.IntroActivity
+import com.autoever.jamanchu.models.Gender
 import com.autoever.jamanchu.models.User
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
@@ -39,8 +41,19 @@ class MyFragment : Fragment() {
             startActivity(intent)
         }
 
+        // 내가 추가한 친구
+        val layoutFriend = view.findViewById<View>(R.id.layoutFriend)
+        layoutFriend.setOnClickListener {
+            val intent = Intent(requireContext(), FriendActivity::class.java)
+            startActivity(intent)
+        }
+
         // 프로필 이미지뷰
         val imageViewUser = view.findViewById<ImageView>(R.id.imageViewUser)
+        val textViewNickname = view.findViewById<TextView>(R.id.textViewNickname)
+        val textViewGender = view.findViewById<TextView>(R.id.textViewGender)
+        val textViewAge = view.findViewById<TextView>(R.id.textViewAge)
+        val textViewIntroduction = view.findViewById<TextView>(R.id.textViewIntroduction)
 
         // 내 정보 불러오기
         val auth = FirebaseAuth.getInstance()
@@ -50,11 +63,15 @@ class MyFragment : Fragment() {
             getUser(currentUserId) { user ->
                 if (user != null) {
                     // 사용자 정보가 성공적으로 가져와졌을 때 처리
-                    println("Email: ${user.email}, Nickname: ${user.nickname}")
+                    println("Email: ${user.email}, Nickname: ${user.nickname}, Image: ${user.image}")
                     Glide.with(requireContext())
                         .load(user.image) // 불러올 이미지의 URL 또는 URI
                         .placeholder(R.drawable.user)
                         .into(imageViewUser) // 이미지를 표시할 ImageView
+                    textViewNickname.text = user.nickname
+                    textViewGender.text = if (user.gender == Gender.MALE) "남" else "여"
+                    textViewAge.text = user.age.toString()
+                    textViewIntroduction.text = user.introduction
                 } else {
                     // 사용자 정보를 가져오는 데 실패했을 때 처리
                     println("User not found or error occurred.")

@@ -23,7 +23,7 @@ class SplashActivity : AppCompatActivity() {
             insets
         }
 
-        // 2초 뒤에 메인 액티비티로 이동
+        // 2초 뒤에 메인 액티비티롤 이동
         Handler(Looper.getMainLooper()).postDelayed({
             val auth = FirebaseAuth.getInstance()
             val currentUser = auth.currentUser

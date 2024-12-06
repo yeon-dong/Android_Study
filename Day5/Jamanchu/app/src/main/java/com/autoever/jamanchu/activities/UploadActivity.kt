@@ -37,7 +37,7 @@ class UploadActivity : AppCompatActivity() {
     private var photoUri: Uri? = null
 
     private lateinit var imageView: ImageView
-    private lateinit var loadingOverlay : FrameLayout // 로딩 오버레이
+    private lateinit var loadingOverlay: FrameLayout // 로딩 오버레이
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +49,8 @@ class UploadActivity : AppCompatActivity() {
             insets
         }
 
-        loadingOverlay.findViewById<FrameLayout>(R.id.loadingOverlay)
+        // 로딩 오버레이
+        loadingOverlay = findViewById(R.id.loadingOverlay)
 
         imageView = findViewById<ImageView>(R.id.imageView)
         val btnCamera = findViewById<TextView>(R.id.btnCamera)
@@ -77,7 +78,7 @@ class UploadActivity : AppCompatActivity() {
     }
 
     private fun upload(uri: Uri) {
-        showLoading(true);
+        showLoading(true)
 
         val storage = FirebaseStorage.getInstance()
         val storageRef: StorageReference = storage.reference
@@ -87,13 +88,14 @@ class UploadActivity : AppCompatActivity() {
         uploadTask.addOnSuccessListener { taskSnapshot ->
             imageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
                 imageUri = null
-                showLoading(false);
+                showLoading(false)
+
                 FirebaseAuth.getInstance().currentUser?.email?.let { email ->
                     updateUserImage(email, downloadUrl.toString())
                 } ?: Toast.makeText(this, "사용자 인증 정보를 찾을 수 없습니다", Toast.LENGTH_SHORT).show()
             }
         }.addOnFailureListener {
-            showLoading(false);
+            showLoading(false)
             Toast.makeText(this, "업로드 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
         }
     }
